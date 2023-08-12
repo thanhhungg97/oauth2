@@ -13,9 +13,6 @@ trait OauthClientService {
 }
 
 object OauthClientService {
-  val layer = (OauthClientServiceImpl.apply _).toLayer[OauthClientService]
-  val live: ZLayer[Any, E1, Has[OauthClientService]] = OauthClientRepository.layer ++ OauthSecretGenerator.live >>> layer
-
   def registerOauthClient(redirectUri: String, scope: String): ZIO[Has[OauthClientService], AppError, OauthId] = ZIO.serviceWith[OauthClientService](_.registerOauthClient(redirectUri, scope))
 }
 
