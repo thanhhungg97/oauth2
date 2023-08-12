@@ -1,0 +1,1 @@
+POST    /clients/register         api.OauthClientController.registerOauthClient()
