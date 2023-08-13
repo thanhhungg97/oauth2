@@ -10,10 +10,14 @@ import java.util.UUID
 trait OauthClientService {
   def registerOauthClient(redirectUri: String, scope: String): IO[AppError, OauthId]
 
+  def getOauthClientConfig(oauthId: OauthId): IO[AppError, Option[OauthClient]]
+
 }
 
 object OauthClientService {
   def registerOauthClient(redirectUri: String, scope: String): ZIO[Has[OauthClientService], AppError, OauthId] = ZIO.serviceWith[OauthClientService](_.registerOauthClient(redirectUri, scope))
+
+  def getOauthClientConfig(oauthId: OauthId): ZIO[Has[OauthClientService], AppError, Option[OauthClient]] = ZIO.serviceWith[OauthClientService](_.getOauthClientConfig(oauthId))
 }
 
 
@@ -26,5 +30,10 @@ case class OauthClientServiceImpl(oauthClientRepository: OauthClientRepository, 
     } yield oauthId
   }
 
+  def getOauthClientConfig(oauthId: OauthId): IO[AppError, Option[OauthClient]] = {
+    for {
+      maybeOauth <- oauthClientRepository.get(oauthId)
+    } yield maybeOauth
+  }
 }
 

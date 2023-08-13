@@ -1,9 +1,9 @@
 package infra.module
 
 import core.repository.OauthClientRepository
-import infra.repository.OauthClientInmemmoryRepository
+import infra.repository.OauthClientMysqlRepository
 import zio._
 
 object OauthClientRepositoryLayer {
-  val layer: ULayer[Has[OauthClientRepository]] = OauthClientInmemmoryRepository.toLayer[OauthClientRepository]
+  val layer: ULayer[Has[OauthClientRepository]] = OauthClientMysqlRepository.toLayer[OauthClientRepository]
 }
