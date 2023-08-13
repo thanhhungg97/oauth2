@@ -2,7 +2,6 @@ import Dependencies.*
 
 val scalaVer = "2.12.9"
 
-val attoVersion = "0.7.2"
 val zioVersion = "1.0.18"
 
 lazy val compileDependencies = Seq(
@@ -20,9 +19,9 @@ lazy val settings = Seq(
   name := "oauth2",
   version := "1.0.0",
   scalaVersion := scalaVer,
-  libraryDependencies ++= compileDependencies ++ testDependencies ++ Logging.all ++ Database.all,
+  libraryDependencies ++= Zio.all ++ Logging.all ++ Database.all,
   libraryDependencies += guice,
-  dependencyOverrides += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.14.2",
+  dependencyOverrides ++= OverrideDependencies.all,
   testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
 )
 

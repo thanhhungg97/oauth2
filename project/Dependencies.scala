@@ -23,4 +23,21 @@ object Dependencies {
     val h2db = "com.h2database" % "h2" % "1.4.200"
     val all: Seq[ModuleID] = Seq(scalikejdbc, mysqlDriver, h2db, scalikeConfig, scalikePlay)
   }
+
+  object Zio {
+    val zioVersion = "1.0.18"
+
+    val zioTest = "dev.zio" %% "zio-test" % zioVersion % Test
+    val zioSbtTest = "dev.zio" %% "zio-test-sbt" % zioVersion % Test
+    val zio = "dev.zio" %% "zio" % zioVersion % Compile
+    val zioMacros = "dev.zio" %% "zio-macros" % zioVersion
+    val all: Seq[ModuleID] = Seq(zio, zioMacros, zioTest, zioSbtTest)
+  }
+
+  object OverrideDependencies {
+    val jacksonXml = "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.14.2"
+    val all: Seq[ModuleID] = Seq(jacksonXml)
+  }
 }
+
+
