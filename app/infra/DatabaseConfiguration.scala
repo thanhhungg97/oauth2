@@ -1,5 +1,0 @@
-package infra
-
-class DatabaseConfiguration {
-
-}
