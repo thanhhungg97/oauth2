@@ -8,7 +8,6 @@ import zio._
 import java.util.UUID
 import scala.collection.immutable.TreeMap
 
-
 case class OauthClientInmemmoryRepository() extends OauthClientRepository {
   private val datas = TreeMap.empty[UUID, OauthClient]
 
@@ -18,5 +17,6 @@ case class OauthClientInmemmoryRepository() extends OauthClientRepository {
 
   override def get(id: OauthId): IO[DatabaseAccessError, Option[OauthClient]] = ZIO.succeed(datas.get(id.uuid))
 
-  override def update(oauthClient: OauthClient): IO[DatabaseAccessError, Unit] = ZIO.succeed(datas + (oauthClient.id.uuid -> oauthClient))
+  override def update(oauthClient: OauthClient): IO[DatabaseAccessError, Unit] =
+    ZIO.succeed(datas + (oauthClient.id.uuid -> oauthClient))
 }

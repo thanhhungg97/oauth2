@@ -8,12 +8,9 @@ trait OauthSecretGenerator {
   def generate(): UIO[OauthSecret]
 }
 
-
-
 case class OauthSecretGeneratorImp(random: Random.Service) extends OauthSecretGenerator {
-  override def generate(): ZIO[Any, Nothing, OauthSecret] = {
+  override def generate(): ZIO[Any, Nothing, OauthSecret] =
     for {
       maybeRandom <- random.nextUUID
     } yield OauthSecret(maybeRandom.toString)
-  }
 }
