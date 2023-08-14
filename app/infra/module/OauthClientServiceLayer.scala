@@ -12,5 +12,6 @@ object OauthClientServiceLayer {
 object OauthSecretGeneratorLayer {
   val layer: URLayer[Has[Random.Service], Has[OauthSecretGenerator]] =
     (OauthSecretGeneratorImp.apply _).toLayer[OauthSecretGenerator]
-  val live: ZLayer[Any, Nothing, Has[OauthSecretGenerator]] = zio.random.Random.live >>> layer
+  val live: ZLayer[Any, Nothing, Has[OauthSecretGenerator]] =
+    zio.random.Random.live >>> layer
 }

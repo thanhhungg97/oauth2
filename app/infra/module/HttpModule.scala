@@ -5,5 +5,6 @@ import infra.module.AppContext.HttpRuntime
 
 class HttpModule extends AbstractModule {
   override def configure(): Unit =
-    bind(new TypeLiteral[HttpRuntime]() {}).toProvider(classOf[HttpRuntimeProvider])
+    bind(new TypeLiteral[HttpRuntime]() {})
+      .toProvider(classOf[HttpRuntimeProvider])
 }

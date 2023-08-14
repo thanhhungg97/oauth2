@@ -7,7 +7,8 @@ import javax.inject.Provider
 
 class HttpRuntimeProvider extends Provider[HttpRuntime] {
   override def get(): HttpRuntime = {
-    val live = OauthClientRepositoryLayer.layer ++ OauthSecretGeneratorLayer.live >>> OauthClientServiceLayer.layer
+    val live =
+      OauthClientRepositoryLayer.layer ++ OauthSecretGeneratorLayer.live >>> OauthClientServiceLayer.layer
     Runtime.unsafeFromLayer(live)
   }
 }

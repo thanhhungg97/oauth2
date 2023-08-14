@@ -39,5 +39,6 @@ case class OauthClientMysqlRepository() extends OauthClientRepository {
       })
       .mapBoth(e => DatabaseAccessError(e.toString), Some(_))
 
-  override def update(oauthClient: OauthClient): IO[DatabaseAccessError, Unit] = ???
+  override def update(oauthClient: OauthClient): IO[DatabaseAccessError, Unit] =
+    ???
 }
