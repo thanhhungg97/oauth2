@@ -9,6 +9,7 @@ class HttpRuntimeProvider extends Provider[HttpRuntime] {
   override def get(): HttpRuntime = {
     val live =
       OauthClientRepositoryLayer.layer ++ OauthSecretGeneratorLayer.live >>> OauthClientServiceLayer.layer
-    Runtime.unsafeFromLayer(live)
+
+    Runtime.unsafeFromLayer(live ++ UserServiceLayer.userServiceLayer)
   }
 }

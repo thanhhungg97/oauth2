@@ -16,7 +16,7 @@ case class OauthClientMysqlRepository() extends OauthClientRepository {
               `id`, `client_secret`, `redirect_uri`,  `scopes`
               )
              values
-              (${oauthClient.id.uuid.toString}, ${oauthClient.clientSecret.secret}, ${oauthClient.redirectUri}, ${oauthClient.scopes})"""
+              (${oauthClient.id.uuid.toString}, ${oauthClient.clientSecret.secret}, ${oauthClient.redirectUri}, ${oauthClient.scopes})  """
           .update()
           .apply()
       })
