@@ -1,25 +1,23 @@
 package core.domain
 
-case class PhoneNumber private (value: Int) {}
+case class PhoneNumber private (value: String) {}
 
 object PhoneNumber {
-  def apply(maybePhoneNumber: Int): PhoneNumber =
-    PhoneNumber(maybePhoneNumber)
+  def apply(maybePhoneNumber: String): PhoneNumber =
+    new PhoneNumber(maybePhoneNumber)
 }
 
 case class Email private (value: String)
 
 object Email {
   def apply(maybeEmail: String): Email =
-    Email(maybeEmail)
+    new Email(maybeEmail)
 }
 
-case class Password private (password: String) {
-  override def toString = s"Reacted"
-}
+case class Password private (value: String) {}
 
 object Password {
-  def apply(maybePassword: String): Password = Password(maybePassword)
+  def apply(maybePassword: String): Password = new Password(maybePassword)
 }
 
 case class User(

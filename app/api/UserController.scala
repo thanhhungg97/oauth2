@@ -6,7 +6,7 @@ import core.error.DataValidationError
 import core.service.UserManagementService
 import infra.module.AppContext.HttpRuntime
 import play.api.libs.json._
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
+import play.api.mvc._
 import zio._
 
 import javax.inject.{Inject, Singleton}
@@ -26,7 +26,7 @@ class UserController @Inject() (controllerComponents: ControllerComponents)(impl
     } yield created
     val result = data.fold(
       e => BadRequest(Json.obj("error" -> e.message)),
-      oauthId => Ok(Json.toJson(oauthId))
+      id => Ok(Json.obj("id" -> id))
     )
     runtime.unsafeRunToFuture(result)
   }

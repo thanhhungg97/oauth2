@@ -9,7 +9,7 @@ import zio.{Function2ToLayerSyntax, Has, IO, URLayer, ZIO}
 import java.util.UUID
 
 trait UserManagementService {
-  def create(command: CreateUserRequest): IO[AppError, Int]
+  def create(command: CreateUserRequest): IO[AppError, String]
 
   def get(id: String): IO[AppError, Option[User]]
 
@@ -19,7 +19,7 @@ object UserManagementService {
   val layer: URLayer[Has[UserRepository] with Has[PasswordService], Has[UserManagementService]] =
     (UserManagementServiceImpl.apply _).toLayer[UserManagementService]
 
-  def create(command: CreateUserRequest): ZIO[Has[UserManagementService], AppError, Int] =
+  def create(command: CreateUserRequest): ZIO[Has[UserManagementService], AppError, String] =
     ZIO.serviceWith[UserManagementService](_.create(command))
   def get(id: String): ZIO[Has[UserManagementService], AppError, Option[User]] =
     ZIO.serviceWith[UserManagementService](_.get(id))
@@ -28,13 +28,14 @@ object UserManagementService {
 
 case class UserManagementServiceImpl(userRepository: UserRepository, passwordService: PasswordService)
     extends UserManagementService {
-  override def create(command: CreateUserRequest): IO[AppError, Int] = {
+  override def create(command: CreateUserRequest): IO[AppError, String] = {
+
     val maybeUser = for {
       password <- passwordService.encode(command.password)
-      userName <- validateDuplicateUserName(command.username)
+      _        <- validateDuplicateUserName(command.username)
     } yield User(
       UUID.randomUUID().toString,
-      userName,
+      command.username,
       password,
       command.email.map(Email(_)),
       command.phoneNumber.map(PhoneNumber(_))
@@ -42,15 +43,16 @@ case class UserManagementServiceImpl(userRepository: UserRepository, passwordSer
 
     for {
       user   <- maybeUser
+      _      <- ZIO.debug(user)
       result <- userRepository.save(user)
     } yield result
   }
 
   override def get(id: String): IO[AppError, Option[User]] = userRepository.get(id)
 
-  private def validateDuplicateUserName(userName: String): IO[AppError, String] =
+  private def validateDuplicateUserName(userName: String): IO[AppError, Unit] =
     for {
-      maybeUser <- userRepository.get(userName)
-      result    <- ZIO.cond(maybeUser.isEmpty, userName, DuplicateUserName(userName))
-    } yield result
+      maybeUser <- userRepository.getByUsername(userName)
+      _         <- ZIO.cond(maybeUser.isEmpty, (), DuplicateUserName(userName))
+    } yield ()
 }
