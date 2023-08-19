@@ -1,15 +1,15 @@
 package core.service
 
 import core.domain.OauthSecret
+import zio.UIO
 import zio.random._
-import zio.{UIO, ZIO}
 
 trait OauthSecretGenerator {
   def generate(): UIO[OauthSecret]
 }
 
 case class OauthSecretGeneratorImp(random: Random.Service) extends OauthSecretGenerator {
-  override def generate(): ZIO[Any, Nothing, OauthSecret] =
+  override def generate(): UIO[OauthSecret] =
     for {
       maybeRandom <- random.nextUUID
     } yield OauthSecret(maybeRandom.toString)

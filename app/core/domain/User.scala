@@ -15,7 +15,7 @@ object Email {
 }
 
 case class Password private (password: String) {
-  override def toString = s"Reateced"
+  override def toString = s"Reacted"
 }
 
 object Password {

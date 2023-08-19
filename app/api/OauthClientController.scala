@@ -1,8 +1,8 @@
 package api
 
-import api.dto.CreateOauthClientRequest
 import api.format.OauthClientFormat._
 import api.format.OauthFormat._
+import core.command.request.CreateOauthClientRequest
 import core.domain.OauthId
 import core.error.DataValidationError
 import core.service.OauthClientService

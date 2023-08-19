@@ -1,3 +1,7 @@
-POST        /clients/register        api.OauthClientController.registerOauthClient()
+POST        /clients            api.OauthClientController.registerOauthClient()
 
-POST        /clients/:id             api.OauthClientController.getOauthClient(id: java.util.UUID)
+GET         /clients/:id        api.OauthClientController.getOauthClient(id: java.util.UUID)
+
+POST        /users              api.UserController.registerUser()
+
+GET         /users/:id          api.UserController.getUser(id: String)

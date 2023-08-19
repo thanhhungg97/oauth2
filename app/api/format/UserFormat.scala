@@ -1,6 +1,6 @@
 package api.format
 
-import api.dto.CreateUserRequest
+import core.command.request.CreateUserRequest
 import core.domain.User
 import play.api.libs.json.{Json, OFormat, OWrites}
 
