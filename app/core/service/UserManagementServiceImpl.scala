@@ -30,7 +30,7 @@ case class UserManagementServiceImpl(userRepository: UserRepository, passwordSer
     extends UserManagementService {
   override def create(command: CreateUserCommand): IO[AppError, Int] = {
     val maybeUser = for {
-      password <- passwordService.toModel(command.password)
+      password <- passwordService.encode(command.password)
       userName <- validateDuplicateUserName(command.userName)
     } yield User(
       UUID.randomUUID().toString,

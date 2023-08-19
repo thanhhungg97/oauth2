@@ -5,7 +5,7 @@ import core.error.PasswordError
 import zio.{Function2ToLayerSyntax, IO}
 
 trait PasswordService {
-  def toModel(maybePassword: String): IO[PasswordError, Password]
+  def encode(maybePassword: String): IO[PasswordError, Password]
 }
 
 object PasswordService {
@@ -13,7 +13,7 @@ object PasswordService {
 }
 
 case class PasswordServiceImpl(passwordPolicy: PasswordPolicy, encoder: Encoder) extends PasswordService {
-  override def toModel(maybePassword: String): IO[PasswordError, Password] =
+  override def encode(maybePassword: String): IO[PasswordError, Password] =
     for {
       _               <- passwordPolicy.validate(maybePassword)
       encodedPassword <- encoder.encode(maybePassword)
