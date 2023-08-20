@@ -49,7 +49,7 @@
     <appender-ref ref="STDOUT" />
   </appender>
 
-  <root level="DEBUG">
+  <root level="TRACE">
     <appender-ref ref="ASYNCSTDOUT" />
   </root>
 

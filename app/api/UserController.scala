@@ -31,6 +31,9 @@ class UserController @Inject() (controllerComponents: ControllerComponents)(impl
     runtime.unsafeRunToFuture(result)
   }
 
+  def index() = Action {
+    Ok("ok")
+  }
   def getUser(id: String): Action[AnyContent] = Action(parse.json).async {
     val data = for {
       maybeOauthClient <- UserManagementService.get(id)
