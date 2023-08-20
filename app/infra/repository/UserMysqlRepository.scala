@@ -1,8 +1,8 @@
 package infra.repository
 
-import core.domain.{Email, Password, PhoneNumber, User}
-import core.error.DatabaseAccessError
-import core.repository.UserRepository
+import domain.domain.{Email, Password, PhoneNumber, User}
+import domain.error.DatabaseAccessError
+import domain.repository.UserRepository
 import scalikejdbc.{DB, scalikejdbcSQLInterpolationImplicitDef}
 import zio.blocking.Blocking
 import zio.{IO, ZIO}

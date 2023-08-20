@@ -1,4 +1,4 @@
-package core.domain
+package domain.domain
 
 case class PhoneNumber private (value: String) {}
 

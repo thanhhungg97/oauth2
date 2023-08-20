@@ -1,7 +1,7 @@
 package infra.module
 
-import core.repository.OauthClientRepository
-import core.service.{OauthClientService, OauthClientServiceImpl, OauthSecretGenerator, OauthSecretGeneratorImp}
+import domain.repository.OauthClientRepository
+import domain.service.{OauthClientService, OauthClientServiceImpl, OauthSecretGenerator, OauthSecretGeneratorImp}
 import zio.random.Random
 import zio.{Function2ToLayerSyntax, Has, ULayer, URLayer}
 

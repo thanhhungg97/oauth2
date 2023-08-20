@@ -1,7 +1,7 @@
-package api.format
+package controllers.format
 
-import core.command.request.CreateUserRequest
-import core.domain.User
+import domain.command.request.CreateUserRequest
+import domain.domain.User
 import play.api.libs.json.{Json, OFormat, OWrites}
 
 object UserFormat {

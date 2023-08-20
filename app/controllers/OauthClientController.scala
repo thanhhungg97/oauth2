@@ -1,11 +1,11 @@
-package api
+package controllers
 
-import api.format.OauthClientFormat._
-import api.format.OauthFormat._
-import core.command.request.CreateOauthClientRequest
-import core.domain.OauthId
-import core.error.DataValidationError
-import core.service.OauthClientService
+import controllers.format.OauthClientFormat._
+import controllers.format.OauthFormat._
+import domain.command.request.CreateOauthClientRequest
+import domain.domain.OauthId
+import domain.error.DataValidationError
+import domain.service.OauthClientService
 import infra.module.AppContext.HttpRuntime
 import play.api.libs.json._
 import play.api.mvc._

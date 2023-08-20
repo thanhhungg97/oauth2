@@ -1,7 +1,7 @@
-package api.format
+package controllers.format
 
-import core.command.request.CreateOauthClientRequest
-import core.domain.OauthId
+import domain.command.request.CreateOauthClientRequest
+import domain.domain.OauthId
 import play.api.libs.json.{Json, OFormat, OWrites}
 
 object OauthFormat {

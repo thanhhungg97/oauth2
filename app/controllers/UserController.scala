@@ -1,9 +1,9 @@
-package api
+package controllers
 
-import api.format.UserFormat._
-import core.command.request.CreateUserRequest
-import core.error.DataValidationError
-import core.service.UserManagementService
+import controllers.format.UserFormat._
+import domain.command.request.CreateUserRequest
+import domain.error.DataValidationError
+import domain.service.UserManagementService
 import infra.module.AppContext.HttpRuntime
 import play.api.libs.json._
 import play.api.mvc._

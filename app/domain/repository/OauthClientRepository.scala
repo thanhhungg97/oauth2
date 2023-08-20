@@ -1,7 +1,7 @@
-package core.repository
+package domain.repository
 
-import core.domain.{OauthClient, OauthId}
-import core.error.DatabaseAccessError
+import domain.domain.{OauthClient, OauthId}
+import domain.error.DatabaseAccessError
 import zio._
 
 trait OauthClientRepository {

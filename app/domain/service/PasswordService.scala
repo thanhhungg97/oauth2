@@ -1,7 +1,7 @@
-package core.service
+package domain.service
 
-import core.domain.Password
-import core.error.PasswordError
+import domain.domain.Password
+import domain.error.PasswordError
 import zio.{Function2ToLayerSyntax, IO}
 
 trait PasswordService {

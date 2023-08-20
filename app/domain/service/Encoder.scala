@@ -1,4 +1,4 @@
-package core.service
+package domain.service
 
 import zio.UIO
 

@@ -1,7 +1,7 @@
-package core.repository
+package domain.repository
 
-import core.domain.User
-import core.error.DatabaseAccessError
+import domain.domain.User
+import domain.error.DatabaseAccessError
 import zio.IO
 
 trait UserRepository {

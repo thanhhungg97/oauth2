@@ -1,8 +1,8 @@
 package infra.repository
 
-import core.domain.{OauthClient, OauthId}
-import core.error.DatabaseAccessError
-import core.repository.OauthClientRepository
+import domain.domain.{OauthClient, OauthId}
+import domain.error.DatabaseAccessError
+import domain.repository.OauthClientRepository
 import zio._
 
 import java.util.UUID

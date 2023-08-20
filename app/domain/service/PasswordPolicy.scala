@@ -1,6 +1,6 @@
-package core.service
+package domain.service
 
-import core.error.{InvalidPassword, PasswordError}
+import domain.error.{InvalidPassword, PasswordError}
 import zio.{Function0ToLayerSyntax, IO, ZIO}
 
 trait PasswordPolicy {

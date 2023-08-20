@@ -1,6 +1,6 @@
-package api.format
+package controllers.format
 
-import core.domain.OauthClient
+import domain.domain.OauthClient
 import play.api.libs.json.{Json, OWrites}
 
 object OauthClientFormat {

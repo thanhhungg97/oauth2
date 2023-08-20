@@ -1,6 +1,6 @@
 package infra.module
 
-import core.service.{OauthClientService, UserManagementService}
+import domain.service.{OauthClientService, UserManagementService}
 import zio.{Has, _}
 
 object AppContext {

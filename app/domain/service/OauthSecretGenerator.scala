@@ -1,6 +1,6 @@
-package core.service
+package domain.service
 
-import core.domain.OauthSecret
+import domain.domain.OauthSecret
 import zio.UIO
 import zio.random._
 

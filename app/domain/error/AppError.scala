@@ -1,4 +1,4 @@
-package core.error
+package domain.error
 
 abstract class AppError(val message: String)
 

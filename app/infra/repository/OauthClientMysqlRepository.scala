@@ -1,8 +1,8 @@
 package infra.repository
 
-import core.domain.{OauthClient, OauthId, OauthSecret}
-import core.error.DatabaseAccessError
-import core.repository.OauthClientRepository
+import domain.domain.{OauthClient, OauthId, OauthSecret}
+import domain.error.DatabaseAccessError
+import domain.repository.OauthClientRepository
 import scalikejdbc.{DB, scalikejdbcSQLInterpolationImplicitDef}
 import zio.{IO, ZIO}
 

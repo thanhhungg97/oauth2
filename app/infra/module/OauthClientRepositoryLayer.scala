@@ -1,6 +1,6 @@
 package infra.module
 
-import core.repository.OauthClientRepository
+import domain.repository.OauthClientRepository
 import infra.repository.OauthClientMysqlRepository
 import zio._
 

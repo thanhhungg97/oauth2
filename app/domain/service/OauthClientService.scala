@@ -1,8 +1,8 @@
-package core.service
+package domain.service
 
-import core.domain.{OauthClient, OauthId}
-import core.error.AppError
-import core.repository.OauthClientRepository
+import domain.domain.{OauthClient, OauthId}
+import domain.error.AppError
+import domain.repository.OauthClientRepository
 import zio._
 
 import java.util.UUID

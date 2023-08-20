@@ -1,9 +1,9 @@
-package core.service
+package domain.service
 
-import core.command.request.CreateUserRequest
-import core.domain.{Email, PhoneNumber, User}
-import core.error.{AppError, DuplicateUserName}
-import core.repository.UserRepository
+import domain.command.request.CreateUserRequest
+import domain.domain.{Email, PhoneNumber, User}
+import domain.error.{AppError, DuplicateUserName}
+import domain.repository.UserRepository
 import zio.{Function2ToLayerSyntax, Has, IO, URLayer, ZIO}
 
 import java.util.UUID

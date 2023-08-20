@@ -1,7 +1,7 @@
 package infra.module
 
-import core.repository.UserRepository
-import core.service.{Encoder, PasswordPolicy, PasswordService, UserManagementService}
+import domain.repository.UserRepository
+import domain.service.{Encoder, PasswordPolicy, PasswordService, UserManagementService}
 import infra.encoder.StringEncoder
 import infra.repository.UserMysqlRepository
 import zio.Function0ToLayerSyntax
