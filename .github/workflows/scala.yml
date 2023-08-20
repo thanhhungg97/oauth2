@@ -41,8 +41,8 @@ jobs:
           # actions/setup-java@v3 changes JAVA_HOME so it needs to be reset to match the depcheck image
           JAVA_HOME: /opt/jdk
         with:
-          project: 'test'
-          path: '.'
+          project: 'oauth2'
+          path: './${{ github.workspace }}/target'
           format: 'HTML'
           out: 'reports' # this is the default, no need to specify unless you wish to override it
           args: >
