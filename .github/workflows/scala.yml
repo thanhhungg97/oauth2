@@ -29,8 +29,6 @@ jobs:
           cache: 'sbt'
       - name: Run tests
         run: sbt test
-      - name: Run compile
-        run: sbt compile
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
