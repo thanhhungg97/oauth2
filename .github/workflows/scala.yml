@@ -29,6 +29,9 @@ jobs:
           cache: 'sbt'
       - name: Run tests
         run: sbt test
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
       - name: Dependencies-check
         uses: dependency-check/Dependency-Check_Action@main
         id: Depcheck
