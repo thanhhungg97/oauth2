@@ -22,31 +22,30 @@ class OauthClientController @Inject() (
 
   def registerOauthClient(): Action[CreateOauthClientRequest] = Action(parse.json[CreateOauthClientRequest]).async {
     request: Request[CreateOauthClientRequest] =>
-      val result: ZIO[Has[OauthClientService], OauthClientServiceError, OauthId] =
-        OauthClientService.registerOauthClient(
-          request.body.redirectURI,
-          request.body.scope
-        )
-
       runtime.unsafeRunToFuture(
-        result.fold(
-          handleError,
-          toResult
-        )
+        OauthClientService
+          .registerOauthClient(
+            request.body.redirectURI,
+            request.body.scope
+          )
+          .fold(
+            handleError,
+            toResult
+          )
       )
   }
 
   def getOauthClient(id: UUID): Action[AnyContent] = Action(parse.json).async {
-    val result = OauthClientService.getOauthClientConfig(OauthId(id))
-
     runtime.unsafeRunToFuture(
-      result.fold(
-        handleError,
-        {
-          case Some(value) => Ok(Json.toJson(value))
-          case None        => BadRequest(Json.obj("code" -> "NOT_FOUND"))
-        }
-      )
+      OauthClientService
+        .getOauthClientConfig(OauthId(id))
+        .fold(
+          handleError,
+          {
+            case Some(value) => Ok(Json.toJson(value))
+            case None        => BadRequest(Json.obj("code" -> "NOT_FOUND"))
+          }
+        )
     )
   }
   private def toResult(oauthId: OauthId) = Ok(Json.toJson(oauthId))
