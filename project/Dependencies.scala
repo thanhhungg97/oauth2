@@ -3,9 +3,14 @@ import sbt.*
 object Dependencies {
   object Logging {
     val zioLoggingVersion             = "0.5.16"
+    val logbackVersion                = "1.4.8"
+    val logstashLogbackEncoderVersion = "7.3"
 
-    val zioLoggingSlf4j = "dev.zio"             %% "zio-logging-slf4j"        % zioLoggingVersion // for zio
-    val all: Seq[ModuleID] = Seq(zioLoggingSlf4j)
+    val zioLogging         = "dev.zio"             %% "zio-logging"              % zioLoggingVersion
+    val zioLoggingSlf4j    = "dev.zio"             %% "zio-logging-slf4j"        % zioLoggingVersion // for zio
+    val logbackClassic     = "ch.qos.logback"       % "logback-classic"          % logbackVersion
+    val logbackEncoder     = "net.logstash.logback" % "logstash-logback-encoder" % logstashLogbackEncoderVersion
+    val all: Seq[ModuleID] = Seq(zioLogging, zioLoggingSlf4j, logbackClassic, logbackEncoder)
   }
 
   object Database {

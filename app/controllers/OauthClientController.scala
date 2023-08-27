@@ -49,7 +49,7 @@ class OauthClientController @Inject() (
   }
   private def toResult(oauthId: OauthId) = Ok(Json.toJson(oauthId))
   private def handleError(error: OauthClientServiceError): Result = error match {
-    case OauthClientServiceError.RepositoryError(cause) =>
-      InternalServerError(Json.obj("code" -> "repository_error", "message" -> cause.getMessage))
+    case OauthClientServiceError.RepositoryError(_) =>
+      InternalServerError(Json.obj("code" -> "repository_error", "message" -> "internal error"))
   }
 }

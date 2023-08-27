@@ -4,7 +4,8 @@ import domain.command.request.CreateUserRequest
 import domain.domain.{Email, PhoneNumber, User}
 import domain.error.AppError
 import domain.repository.{UserRepository, UserRepositoryError => URError}
-import zio.{Function2ToLayerSyntax, Has, IO, URLayer, ZIO}
+import zio.logging.{LogAnnotation, Logger}
+import zio.{Has, IO, URLayer, ZIO}
 
 import java.util.UUID
 
@@ -30,7 +31,8 @@ object UserManagementServiceError {
 }
 
 object UserManagementService {
-  val layer: URLayer[Has[UserRepository] with Has[PasswordService], Has[UserManagementService]] =
+  val pure
+    : URLayer[Has[UserRepository] with Has[PasswordService] with Has[Logger[String]], Has[UserManagementService]] =
     (UserManagementServiceImpl.apply _).toLayer[UserManagementService]
 
   def create(command: CreateUserRequest): ZIO[Has[UserManagementService], UserManagementServiceError, String] =
@@ -40,13 +42,20 @@ object UserManagementService {
 
 }
 
-case class UserManagementServiceImpl(userRepository: UserRepository, passwordService: PasswordService)
-    extends UserManagementService {
+case class UserManagementServiceImpl(
+  userRepository: UserRepository,
+  passwordService: PasswordService,
+  log: Logger[String]
+) extends UserManagementService {
   override def create(command: CreateUserRequest): IO[UserManagementServiceError, String] = {
 
     val maybeUser = for {
       password <- passwordService.encode(command.password).mapError(handlePasswordServiceError)
       _        <- validateDuplicateUserName(command.username)
+      _ <- log.locally(LogAnnotation.Name("my-logger" :: Nil)) {
+             log.warn("testLog" + password.toString) // value of LogAnnotation.Name is only visible in this block
+           }
+
     } yield User(
       UUID.randomUUID().toString,
       command.username,
