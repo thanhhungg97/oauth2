@@ -8,4 +8,4 @@ Project implement oauth 2 from beginning
 ### Run application
     ./bin/sbt run
 ### Stop ActorServer when running which sbt shell
-    press: Control + D
+    press: control + D
