@@ -8,7 +8,6 @@ import domain.service.{OauthClientService, OauthClientServiceError}
 import infra.module.AppContext.HttpRuntime
 import play.api.libs.json._
 import play.api.mvc._
-import zio._
 
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
