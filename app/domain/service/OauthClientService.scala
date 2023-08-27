@@ -1,8 +1,7 @@
 package domain.service
 
 import domain.domain.{OauthClient, OauthId}
-import domain.error.AppError
-import domain.repository.OauthClientRepository
+import domain.repository.{OauthClientRepository, OauthClientRepositoryError}
 import zio._
 
 import java.util.UUID
@@ -11,24 +10,31 @@ trait OauthClientService {
   def registerOauthClient(
     redirectUri: String,
     scope: String
-  ): IO[AppError, OauthId]
+  ): IO[OauthClientServiceError, OauthId]
 
-  def getOauthClientConfig(oauthId: OauthId): IO[AppError, Option[OauthClient]]
+  def getOauthClientConfig(oauthId: OauthId): IO[OauthClientServiceError, Option[OauthClient]]
 
+}
+
+sealed trait OauthClientServiceError extends Throwable
+object OauthClientServiceError {
+  final case class RepositoryError(cause: domain.repository.OauthClientRepositoryError)
+      extends Throwable(cause)
+      with OauthClientServiceError
 }
 
 object OauthClientService {
   def registerOauthClient(
     redirectUri: String,
     scope: String
-  ): ZIO[Has[OauthClientService], AppError, OauthId] =
+  ): ZIO[Has[OauthClientService], OauthClientServiceError, OauthId] =
     ZIO.serviceWith[OauthClientService](
       _.registerOauthClient(redirectUri, scope)
     )
 
   def getOauthClientConfig(
     oauthId: OauthId
-  ): ZIO[Has[OauthClientService], AppError, Option[OauthClient]] =
+  ): ZIO[Has[OauthClientService], OauthClientServiceError, Option[OauthClient]] =
     ZIO.serviceWith[OauthClientService](_.getOauthClientConfig(oauthId))
 }
 
@@ -39,19 +45,24 @@ case class OauthClientServiceImpl(
   def registerOauthClient(
     redirectUri: String,
     scope: String
-  ): IO[AppError, OauthId] =
+  ): IO[OauthClientServiceError, OauthId] =
     for {
       secret  <- oauthSecretGenerator.generate()
       oauthId <- ZIO.succeed(OauthId(UUID.randomUUID()))
-      _ <- oauthClientRepository.save(
-             OauthClient(oauthId, secret, redirectUri, scope)
-           )
+      _ <- oauthClientRepository
+             .save(
+               OauthClient(oauthId, secret, redirectUri, scope)
+             )
+             .mapError(handleRepositoryError)
     } yield oauthId
 
   def getOauthClientConfig(
     oauthId: OauthId
-  ): IO[AppError, Option[OauthClient]] =
+  ): IO[OauthClientServiceError, Option[OauthClient]] =
     for {
-      maybeOauth <- oauthClientRepository.get(oauthId)
+      maybeOauth <- oauthClientRepository.get(oauthId).mapError(handleRepositoryError)
     } yield maybeOauth
+
+  def handleRepositoryError(error: OauthClientRepositoryError): OauthClientServiceError =
+    OauthClientServiceError.RepositoryError(error)
 }

@@ -5,6 +5,7 @@ import infra.repository.OauthClientMysqlRepository
 import zio._
 
 object OauthClientRepositoryLayer {
-  val layer: ULayer[Has[OauthClientRepository]] =
-    OauthClientMysqlRepository.toLayer[OauthClientRepository]
+  private val pure = OauthClientMysqlRepository.toLayer[OauthClientRepository]
+
+  val layer: ULayer[Has[OauthClientRepository]] = zio.blocking.Blocking.live >>> pure
 }

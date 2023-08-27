@@ -1,15 +1,15 @@
 package infra.repository
 
 import domain.domain.{OauthClient, OauthId, OauthSecret}
-import domain.error.DatabaseAccessError
-import domain.repository.OauthClientRepository
+import domain.repository.{OauthClientRepository, OauthClientRepositoryError}
 import scalikejdbc.{DB, scalikejdbcSQLInterpolationImplicitDef}
+import zio.blocking.Blocking._
 import zio.{IO, ZIO}
 
 import java.util.UUID
 
-case class OauthClientMysqlRepository() extends OauthClientRepository {
-  override def save(oauthClient: OauthClient): IO[DatabaseAccessError, Int] =
+case class OauthClientMysqlRepository(blocking: Service) extends OauthClientRepository {
+  override def save(oauthClient: OauthClient): IO[OauthClientRepositoryError, Int] =
     ZIO
       .effect(DB.autoCommit[Int] { implicit session =>
         sql"""insert into oauth_client(
@@ -20,11 +20,11 @@ case class OauthClientMysqlRepository() extends OauthClientRepository {
           .update()
           .apply()
       })
-      .mapError(e => DatabaseAccessError(e.toString))
+      .mapError(OauthClientRepositoryError.ServerError)
 
-  override def get(id: OauthId): IO[DatabaseAccessError, Option[OauthClient]] =
-    ZIO
-      .fromOption(DB readOnly { implicit session =>
+  override def get(id: OauthId): IO[OauthClientRepositoryError, Option[OauthClient]] =
+    blocking.effectBlocking {
+      DB.readOnly[Option[OauthClient]] { implicit session =>
         sql"select id, client_secret, redirect_uri, scopes from oauth_client where id = ${id.uuid.toString}"
           .map(rs =>
             OauthClient(
@@ -36,9 +36,9 @@ case class OauthClientMysqlRepository() extends OauthClientRepository {
           )
           .single()
           .apply()
-      })
-      .mapBoth(e => DatabaseAccessError(e.toString), Some(_))
+      }
+    }.mapError(OauthClientRepositoryError.ServerError)
 
-  override def update(oauthClient: OauthClient): IO[DatabaseAccessError, Unit] =
+  override def update(oauthClient: OauthClient): IO[OauthClientRepositoryError, Unit] =
     ???
 }

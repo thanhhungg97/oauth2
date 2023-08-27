@@ -1,38 +1,35 @@
 package infra.repository
 
 import domain.domain.{Email, Password, PhoneNumber, User}
-import domain.error.DatabaseAccessError
-import domain.repository.UserRepository
+import domain.repository.{UserRepository, UserRepositoryError}
 import scalikejdbc.{DB, scalikejdbcSQLInterpolationImplicitDef}
+import zio.IO
 import zio.blocking.Blocking
-import zio.{IO, ZIO}
 
 case class UserMysqlRepository(blocking: Blocking.Service) extends UserRepository {
-  override def save(user: User): IO[DatabaseAccessError, String] =
+  override def save(user: User): IO[UserRepositoryError, String] =
     blocking.effectBlocking {
       DB.autoCommit { implicit session =>
         val rowEffected =
           sql"""insert into user(`id`, `username`,  `password`, `email`, `phone_number`)
                        values
-                       (${user.id}, ${user.username}, ${user.password.value},${
-            user.email
+                       (${user.id}, ${user.username}, ${user.password.value},${user.email
               .map(_.value)
-              .getOrElse("")
-          },${user.phoneNumber.map(_.value).getOrElse("")})
+              .getOrElse("")},${user.phoneNumber.map(_.value).getOrElse("")})
 
             """
             .update()
             .apply()
-        Either.cond(rowEffected == 1, user.id, DatabaseAccessError("No row was inserted"))
+        Either.cond(rowEffected == 1, user.id, UserRepositoryError.ValidationError("No row was inserted"))
       }
-    }.mapBoth(error => DatabaseAccessError(error.getMessage), _ => user.id)
-  override def get(id: String): IO[DatabaseAccessError, Option[User]] =
-    ZIO
-      .fromOption(DB.readOnly[Option[User]] { implicit session =>
+    }.mapBoth(UserRepositoryError.ServiceError, _ => user.id)
+  override def get(id: String): IO[UserRepositoryError, Option[User]] =
+    blocking.effectBlocking {
+      DB.readOnly[Option[User]] { implicit session =>
         sql"""select id, username,password, email, phone_number
-             from user
-             where id = $id
-           """.map { rs =>
+                   from user
+                   where id = $id
+                 """.map { rs =>
           User(
             rs.string("id"),
             rs.string("username"),
@@ -43,10 +40,11 @@ case class UserMysqlRepository(blocking: Blocking.Service) extends UserRepositor
         }
           .single()
           .apply()
-      })
-      .mapBoth(error => DatabaseAccessError(error.get), Some(_))
+      }
+    }
+      .mapError(UserRepositoryError.ServiceError)
 
-  override def getByUsername(username: String): IO[DatabaseAccessError, Option[User]] =
+  override def getByUsername(username: String): IO[UserRepositoryError, Option[User]] =
     blocking.effectBlocking {
       DB.readOnly[Option[User]] { implicit session =>
         sql"""select id, username, password, email, phone_number
@@ -64,6 +62,6 @@ case class UserMysqlRepository(blocking: Blocking.Service) extends UserRepositor
           .single()
           .apply()
       }
-    }.mapError(error => DatabaseAccessError(error.getMessage))
+    }.mapError(UserRepositoryError.ServiceError)
 
 }
