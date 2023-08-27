@@ -2,7 +2,9 @@ package domain.service
 
 import domain.domain.{OauthClient, OauthId}
 import domain.repository.{OauthClientRepository, OauthClientRepositoryError}
+import libs.Telemetry
 import zio._
+import zio.logging.{LogLevel, Logger}
 
 import java.util.UUID
 
@@ -40,8 +42,10 @@ object OauthClientService {
 
 case class OauthClientServiceImpl(
   oauthClientRepository: OauthClientRepository,
-  oauthSecretGenerator: OauthSecretGenerator
-) extends OauthClientService {
+  oauthSecretGenerator: OauthSecretGenerator,
+  logging: Logger[String]
+) extends OauthClientService
+    with Telemetry {
   def registerOauthClient(
     redirectUri: String,
     scope: String
@@ -58,8 +62,9 @@ case class OauthClientServiceImpl(
 
   def getOauthClientConfig(
     oauthId: OauthId
-  ): IO[OauthClientServiceError, Option[OauthClient]] =
+  ): IO[OauthClientServiceError, Option[OauthClient]] = log("UserManagementService.create", LogLevel.Info) {
     oauthClientRepository.get(oauthId).mapError(handleRepositoryError)
+  }
 
   private def handleRepositoryError(error: OauthClientRepositoryError): OauthClientServiceError =
     OauthClientServiceError.RepositoryError(error)

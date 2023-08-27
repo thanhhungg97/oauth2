@@ -4,7 +4,8 @@ import domain.command.request.CreateUserRequest
 import domain.domain.{Email, PhoneNumber, User}
 import domain.error.AppError
 import domain.repository.{UserRepository, UserRepositoryError => URError}
-import zio.logging.{LogAnnotation, Logger}
+import libs.Telemetry
+import zio.logging.Logger
 import zio.{Has, IO, URLayer, ZIO}
 
 import java.util.UUID
@@ -45,30 +46,29 @@ object UserManagementService {
 case class UserManagementServiceImpl(
   userRepository: UserRepository,
   passwordService: PasswordService,
-  log: Logger[String]
-) extends UserManagementService {
-  override def create(command: CreateUserRequest): IO[UserManagementServiceError, String] = {
+  logging: Logger[String]
+) extends UserManagementService
+    with Telemetry {
 
-    val maybeUser = for {
-      password <- passwordService.encode(command.password).mapError(handlePasswordServiceError)
-      _        <- validateDuplicateUserName(command.username)
-      _ <- log.locally(LogAnnotation.Name("my-logger" :: Nil)) {
-             log.warn("testLog" + password.toString) // value of LogAnnotation.Name is only visible in this block
-           }
+  override def create(command: CreateUserRequest): IO[UserManagementServiceError, String] =
+    log("UserManagementService.create") {
+      val maybeUser = for {
+        password <- passwordService.encode(command.password).mapError(handlePasswordServiceError)
+        _        <- validateDuplicateUserName(command.username)
 
-    } yield User(
-      UUID.randomUUID().toString,
-      command.username,
-      password,
-      command.email.map(Email(_)),
-      command.phoneNumber.map(PhoneNumber(_))
-    )
+      } yield User(
+        UUID.randomUUID().toString,
+        command.username,
+        password,
+        command.email.map(Email(_)),
+        command.phoneNumber.map(PhoneNumber(_))
+      )
 
-    for {
-      user   <- maybeUser
-      result <- userRepository.save(user).mapError(handleUserRepositoryError)
-    } yield result
-  }
+      for {
+        user   <- maybeUser
+        result <- userRepository.save(user).mapError(handleUserRepositoryError)
+      } yield result
+    }
 
   override def get(id: String): IO[UserManagementServiceError, Option[User]] =
     userRepository.get(id).mapError(handleUserRepositoryError)

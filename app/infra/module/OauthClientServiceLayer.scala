@@ -2,11 +2,14 @@ package infra.module
 
 import domain.repository.OauthClientRepository
 import domain.service.{OauthClientService, OauthClientServiceImpl, OauthSecretGenerator, OauthSecretGeneratorImp}
+import zio.logging.Logger
 import zio.random.Random
-import zio.{Function2ToLayerSyntax, Has, ULayer, URLayer}
+import zio.{Has, ULayer, URLayer}
 
 object OauthClientServiceLayer {
-  val layer: URLayer[Has[OauthClientRepository] with Has[OauthSecretGenerator], Has[OauthClientService]] =
+  val layer: URLayer[Has[OauthClientRepository] with Has[OauthSecretGenerator] with Has[Logger[String]], Has[
+    OauthClientService
+  ]] =
     (OauthClientServiceImpl.apply _).toLayer[OauthClientService]
 }
 object OauthSecretGeneratorLayer {
