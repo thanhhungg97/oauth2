@@ -59,10 +59,8 @@ case class OauthClientServiceImpl(
   def getOauthClientConfig(
     oauthId: OauthId
   ): IO[OauthClientServiceError, Option[OauthClient]] =
-    for {
-      maybeOauth <- oauthClientRepository.get(oauthId).mapError(handleRepositoryError)
-    } yield maybeOauth
+    oauthClientRepository.get(oauthId).mapError(handleRepositoryError)
 
-  def handleRepositoryError(error: OauthClientRepositoryError): OauthClientServiceError =
+  private def handleRepositoryError(error: OauthClientRepositoryError): OauthClientServiceError =
     OauthClientServiceError.RepositoryError(error)
 }

@@ -70,8 +70,8 @@ case class UserManagementServiceImpl(userRepository: UserRepository, passwordSer
       _         <- ZIO.cond(maybeUser.isEmpty, (), UserManagementServiceError.DuplicateUserName(userName))
     } yield ()
 
-  def handlePasswordServiceError(e: PasswordError): UserManagementServiceError.PasswordServiceError =
+  private def handlePasswordServiceError(e: PasswordError): UserManagementServiceError.PasswordServiceError =
     UserManagementServiceError.PasswordServiceError(e)
-  def handleUserRepositoryError(error: URError): UserManagementServiceError.UserRepositoryError =
+  private def handleUserRepositoryError(error: URError): UserManagementServiceError.UserRepositoryError =
     UserManagementServiceError.UserRepositoryError(error)
 }
