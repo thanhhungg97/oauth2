@@ -27,7 +27,7 @@ case class PasswordServiceImpl(passwordPolicy: PasswordPolicy, encoder: Encoder)
 
   override def encode(maybePassword: String): IO[PasswordError, Password] =
     for {
-      _               <- passwordPolicy.validate(maybePassword).mapError(error => handlePasswordPolicyError(error))
+      _               <- passwordPolicy.validate(maybePassword).mapError(handlePasswordPolicyError)
       encodedPassword <- encoder.encode(maybePassword)
     } yield Password(encodedPassword)
   private[this] def handlePasswordPolicyError(error: PasswordPolicyError): PasswordError = InvalidPasswordPolicy(error)

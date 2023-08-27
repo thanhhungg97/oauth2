@@ -1,8 +1,9 @@
 package domain.service
 
 import domain.service.PasswordPolicyError.InvalidPassword
+import zio.macros.accessible
 import zio.{Function0ToLayerSyntax, IO, ZIO}
-
+@accessible
 trait PasswordPolicy {
   def validate(maybePassword: String): IO[PasswordPolicyError, Unit]
 

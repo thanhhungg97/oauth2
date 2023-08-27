@@ -11,7 +11,7 @@ trait LogWithNamed[A] {
 
   private val named = this.getClass.getCanonicalName
 
-  protected val namedLogging = logging.named(named)
+  protected val namedLogging: Logger[A] = logging.named(named)
 
 }
 
@@ -45,16 +45,17 @@ trait Telemetry extends LogWithNamed[String] {
 }
 
 object Telemetry {
-  val funcLogAnnotation = LogAnnotation.optional[String]("func", identity)
-  val logErrorAnnotation = LogAnnotation.optional[Any](
+  val funcLogAnnotation: LogAnnotation[Option[String]] = LogAnnotation.optional[String]("func", identity)
+  val logErrorAnnotation: LogAnnotation[Option[Any]] = LogAnnotation.optional[Any](
     "error",
     {
       case error: AppError => error.getMessage
       case error           => error.toString
     }
   )
-  val logErrorNameAnnotation = LogAnnotation.optional[Any]("errorName", _.getClass.getSimpleName)
+  val logErrorNameAnnotation: LogAnnotation[Option[Any]] =
+    LogAnnotation.optional[Any]("errorName", _.getClass.getSimpleName)
 
-  val resultLogAnnotation = LogAnnotation.optional[Any]("result", _.toString)
+  val resultLogAnnotation: LogAnnotation[Option[Any]] = LogAnnotation.optional[Any]("result", _.toString)
 
 }
