@@ -43,8 +43,10 @@ case class UserManagementServiceImpl(
       } yield result
     }
 
-  override def get(id: String): IO[UserManagementServiceError, Option[User]] =
+  override def get(id: String): IO[UserManagementServiceError, Option[User]] = log("UserManagementService.get") {
     userRepository.get(id).mapError(handleUserRepositoryError)
+
+  }
 
   private def validateDuplicateUserName(userName: String): IO[UserManagementServiceError, Unit] =
     for {
