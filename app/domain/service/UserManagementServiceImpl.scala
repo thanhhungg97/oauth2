@@ -2,6 +2,7 @@ package domain.service
 
 import domain.command.request.CreateUserRequest
 import domain.domain.{Email, PhoneNumber, User}
+import domain.error.{PasswordError, UserManagementServiceError}
 import domain.repository.{UserRepository, UserRepositoryError => URError}
 import libs.Telemetry
 import zio.logging.Logger

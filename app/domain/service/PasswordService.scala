@@ -1,7 +1,8 @@
 package domain.service
 
 import domain.domain.Password
-import domain.service.PasswordError.InvalidPasswordPolicy
+import domain.error.PasswordError
+import domain.error.PasswordError._
 import zio.{Function2ToLayerSyntax, IO}
 
 trait PasswordService {
@@ -11,10 +12,10 @@ trait PasswordService {
 case class PasswordServiceImpl(passwordPolicy: PasswordPolicy, encoder: Encoder) extends PasswordService {
 
   override def encode(maybePassword: String): IO[PasswordError, Password] =
-  for {
-    _               <- passwordPolicy.validate(maybePassword).mapError(handlePasswordPolicyError)
-    encodedPassword <- encoder.encode(maybePassword)
-  } yield Password(encodedPassword)
+    for {
+      _               <- passwordPolicy.validate(maybePassword).mapError(handlePasswordPolicyError)
+      encodedPassword <- encoder.encode(maybePassword)
+    } yield Password(encodedPassword)
   private[this] def handlePasswordPolicyError(error: PasswordPolicyError): PasswordError = InvalidPasswordPolicy(error)
 
 }

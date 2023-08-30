@@ -2,7 +2,8 @@ package controllers
 
 import controllers.format.UserFormat._
 import domain.command.request.CreateUserRequest
-import domain.service.{UserManagementService, UserManagementServiceError}
+import domain.error.UserManagementServiceError
+import domain.service.UserManagementService
 import infra.module.AppContext.HttpRuntime
 import play.api.libs.json._
 import play.api.mvc._

@@ -1,6 +1,5 @@
-package domain.service
+package domain.error
 
-import domain.error.AppError
 import domain.repository.{UserRepositoryError => URError}
 sealed trait UserManagementServiceError extends Throwable
 

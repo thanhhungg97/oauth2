@@ -1,4 +1,6 @@
-package domain.service
+package domain.error
+
+import domain.service.PasswordPolicyError
 
 sealed trait PasswordError extends Throwable
 
