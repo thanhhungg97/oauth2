@@ -1,6 +1,7 @@
 package domain.service
 
 import domain.domain.{OauthClient, OauthId}
+import domain.error.OauthClientServiceError
 import domain.repository.{OauthClientRepository, OauthClientRepositoryError}
 import libs.Telemetry
 import zio._
@@ -16,28 +17,6 @@ trait OauthClientService {
 
   def getOauthClientConfig(oauthId: OauthId): IO[OauthClientServiceError, Option[OauthClient]]
 
-}
-
-sealed trait OauthClientServiceError extends Throwable
-object OauthClientServiceError {
-  final case class RepositoryError(cause: domain.repository.OauthClientRepositoryError)
-      extends Throwable(cause)
-      with OauthClientServiceError
-}
-
-object OauthClientService {
-  def registerOauthClient(
-    redirectUri: String,
-    scope: String
-  ): ZIO[Has[OauthClientService], OauthClientServiceError, OauthId] =
-    ZIO.serviceWith[OauthClientService](
-      _.registerOauthClient(redirectUri, scope)
-    )
-
-  def getOauthClientConfig(
-    oauthId: OauthId
-  ): ZIO[Has[OauthClientService], OauthClientServiceError, Option[OauthClient]] =
-    ZIO.serviceWith[OauthClientService](_.getOauthClientConfig(oauthId))
 }
 
 case class OauthClientServiceImpl(
@@ -68,4 +47,18 @@ case class OauthClientServiceImpl(
 
   private def handleRepositoryError(error: OauthClientRepositoryError): OauthClientServiceError =
     OauthClientServiceError.RepositoryError(error)
+}
+object OauthClientService {
+  def registerOauthClient(
+    redirectUri: String,
+    scope: String
+  ): ZIO[Has[OauthClientService], OauthClientServiceError, OauthId] =
+    ZIO.serviceWith[OauthClientService](
+      _.registerOauthClient(redirectUri, scope)
+    )
+
+  def getOauthClientConfig(
+    oauthId: OauthId
+  ): ZIO[Has[OauthClientService], OauthClientServiceError, Option[OauthClient]] =
+    ZIO.serviceWith[OauthClientService](_.getOauthClientConfig(oauthId))
 }
