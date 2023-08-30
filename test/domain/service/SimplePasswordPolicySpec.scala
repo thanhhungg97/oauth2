@@ -1,6 +1,6 @@
 package domain.service
 
-import domain.service.PasswordPolicyError.InvalidPassword
+import domain.error.PasswordPolicyError.InvalidPassword
 import zio.test.Assertion._
 import zio.test._
 
