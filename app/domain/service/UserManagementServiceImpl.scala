@@ -2,7 +2,6 @@ package domain.service
 
 import domain.command.request.CreateUserRequest
 import domain.domain.{Email, PhoneNumber, User}
-import domain.error.AppError
 import domain.repository.{UserRepository, UserRepositoryError => URError}
 import libs.Telemetry
 import zio.logging.Logger
@@ -14,32 +13,6 @@ trait UserManagementService {
   def create(command: CreateUserRequest): IO[UserManagementServiceError, String]
 
   def get(id: String): IO[UserManagementServiceError, Option[User]]
-
-}
-
-sealed trait UserManagementServiceError extends Throwable
-
-object UserManagementServiceError {
-  final case class PasswordServiceError(cause: PasswordError) extends Throwable(cause) with UserManagementServiceError
-
-  final case class UserRepositoryError(cause: URError) extends Throwable(cause) with UserManagementServiceError
-
-  final case class DuplicateUserName(name: String)
-      extends Throwable(s"Duplicate User Name: $name")
-      with UserManagementServiceError
-      with AppError.DomainError
-
-}
-
-object UserManagementService {
-  val pure
-    : URLayer[Has[UserRepository] with Has[PasswordService] with Has[Logger[String]], Has[UserManagementService]] =
-    (UserManagementServiceImpl.apply _).toLayer[UserManagementService]
-
-  def create(command: CreateUserRequest): ZIO[Has[UserManagementService], UserManagementServiceError, String] =
-    ZIO.serviceWith[UserManagementService](_.create(command))
-  def get(id: String): ZIO[Has[UserManagementService], UserManagementServiceError, Option[User]] =
-    ZIO.serviceWith[UserManagementService](_.get(id))
 
 }
 
@@ -83,4 +56,16 @@ case class UserManagementServiceImpl(
     UserManagementServiceError.PasswordServiceError(e)
   private def handleUserRepositoryError(error: URError): UserManagementServiceError.UserRepositoryError =
     UserManagementServiceError.UserRepositoryError(error)
+}
+
+object UserManagementService {
+  val pure
+    : URLayer[Has[UserRepository] with Has[PasswordService] with Has[Logger[String]], Has[UserManagementService]] =
+    (UserManagementServiceImpl.apply _).toLayer[UserManagementService]
+
+  def create(command: CreateUserRequest): ZIO[Has[UserManagementService], UserManagementServiceError, String] =
+    ZIO.serviceWith[UserManagementService](_.create(command))
+  def get(id: String): ZIO[Has[UserManagementService], UserManagementServiceError, Option[User]] =
+    ZIO.serviceWith[UserManagementService](_.get(id))
+
 }
