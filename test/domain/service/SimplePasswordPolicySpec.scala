@@ -5,7 +5,7 @@ import zio.test.Assertion._
 import zio.test._
 
 object SimplePasswordPolicySpec extends DefaultRunnableSpec {
-  override def spec =
+  override def spec: ZSpec[environment.TestEnvironment, Any] =
     suite("PasswordPolicySpec")(
       testM("Password length less than 6, return invalid password") {
         for {
