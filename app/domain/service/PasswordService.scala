@@ -3,8 +3,11 @@ package domain.service
 import domain.domain.Password
 import domain.error.{PasswordError, PasswordPolicyError}
 import domain.error.PasswordError._
+import zio.macros.accessible
 import zio.{Function2ToLayerSyntax, IO}
 
+
+@accessible
 trait PasswordService {
   def encode(maybePassword: String): IO[PasswordError, Password]
 }
