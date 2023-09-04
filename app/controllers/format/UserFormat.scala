@@ -1,8 +1,8 @@
 package controllers.format
 
-import domain.command.request.CreateUserRequest
-import domain.domain.User
+import domain.User
 import play.api.libs.json.{Json, OFormat, OWrites}
+import command.CreateUserRequest
 
 object UserFormat {
   implicit val userWriteFormat: OWrites[User] = user => {

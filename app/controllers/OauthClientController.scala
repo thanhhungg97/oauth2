@@ -2,13 +2,13 @@ package controllers
 
 import controllers.format.OauthClientFormat._
 import controllers.format.OauthFormat._
-import domain.command.request.CreateOauthClientRequest
-import domain.domain.OauthId
-import domain.error.OauthClientServiceError
-import domain.service.OauthClientService
-import infra.module.AppContext.HttpRuntime
+import domain.OauthId
+import error.OauthClientServiceError
+import controllers.modules.AppContext.HttpRuntime
 import play.api.libs.json._
 import play.api.mvc._
+import command._
+import service.OauthClientService
 
 import java.util.UUID
 import javax.inject.{Inject, Singleton}

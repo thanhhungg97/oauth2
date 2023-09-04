@@ -1,12 +1,12 @@
 package controllers
 
+import command._
 import controllers.format.UserFormat._
-import domain.command.request.CreateUserRequest
-import domain.error.UserManagementServiceError
-import domain.service.UserManagementService
-import infra.module.AppContext.HttpRuntime
+import error.UserManagementServiceError
+import controllers.modules.AppContext.HttpRuntime
 import play.api.libs.json._
 import play.api.mvc._
+import service._
 
 import javax.inject.{Inject, Singleton}
 @Singleton
@@ -35,7 +35,7 @@ class UserController @Inject() (controllerComponents: ControllerComponents)(impl
   private def handleError(error: UserManagementServiceError): Result = error match {
     case UserManagementServiceError.PasswordServiceError(cause) =>
       BadRequest(Json.obj("code" -> "password_invalid", "message" -> cause.getMessage))
-    case UserManagementServiceError.UserRepositoryError(cause) =>
+    case UserManagementServiceError.RepositoryError(cause) =>
       InternalServerError(Json.obj("code" -> "repository_error", "message" -> cause.getMessage))
     case UserManagementServiceError.DuplicateUserName(name) =>
       BadRequest(Json.obj("code" -> "duplicate_username", "message" -> s"$name is duplicated"))

@@ -1,8 +1,8 @@
 package controllers.format
 
-import domain.command.request.CreateOauthClientRequest
-import domain.domain.OauthId
+import domain.OauthId
 import play.api.libs.json.{Json, OFormat, OWrites}
+import command.CreateOauthClientRequest
 
 object OauthFormat {
   implicit val createOauthRequestFormat: OFormat[CreateOauthClientRequest] =
