@@ -1,7 +1,8 @@
-package repository
+package infra.repository
 
 import domain._
 import error.UserRepositoryError
+import repository.UserRepository
 import scalikejdbc.{DB, scalikejdbcSQLInterpolationImplicitDef}
 import zio.IO
 import zio.blocking.Blocking

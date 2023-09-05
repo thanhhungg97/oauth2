@@ -1,4 +1,4 @@
-package layer
+package infra.layer
 
 import repository.OauthClientRepository
 import service.{OauthClientService, OauthClientServiceImpl, OauthSecretGenerator, OauthSecretGeneratorImp}

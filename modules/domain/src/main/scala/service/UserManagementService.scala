@@ -3,8 +3,8 @@ package service
 import common.Telemetry
 import domain.{Email, PhoneNumber, User}
 import error.{PasswordError, UserManagementServiceError, UserRepositoryError}
-import repository.UserRepository
 import command.CreateUserRequest
+import repository.UserRepository
 import zio.logging.Logger
 import zio.{Has, IO, URLayer, ZIO}
 

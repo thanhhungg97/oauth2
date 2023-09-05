@@ -1,7 +1,8 @@
-package repository
+package infra.repository
 
 import domain.{OauthClient, OauthId, OauthSecret}
 import error.OauthClientRepositoryError
+import repository.OauthClientRepository
 import scalikejdbc.{DB, scalikejdbcSQLInterpolationImplicitDef}
 import zio.blocking.Blocking._
 import zio.{IO, ZIO}

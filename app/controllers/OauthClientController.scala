@@ -4,7 +4,7 @@ import controllers.format.OauthClientFormat._
 import controllers.format.OauthFormat._
 import domain.OauthId
 import error.OauthClientServiceError
-import controllers.modules.AppContext.HttpRuntime
+import infra.modules.AppContext.HttpRuntime
 import play.api.libs.json._
 import play.api.mvc._
 import command._

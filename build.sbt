@@ -20,7 +20,6 @@ lazy val common = project
     name := "common",
     commonSettings,
     libraryDependencies ++= Zio.all ++ Logging.all,
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
   )
 
 lazy val domain = project

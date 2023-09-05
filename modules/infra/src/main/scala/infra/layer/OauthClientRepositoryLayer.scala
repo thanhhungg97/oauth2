@@ -1,6 +1,7 @@
-package layer
+package infra.layer
 
-import repository.{OauthClientMysqlRepository, OauthClientRepository}
+import infra.repository.OauthClientMysqlRepository
+import repository.{OauthClientRepository}
 import zio._
 
 object OauthClientRepositoryLayer {

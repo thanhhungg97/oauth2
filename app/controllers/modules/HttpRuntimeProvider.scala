@@ -1,7 +1,7 @@
 package controllers.modules
 
-import controllers.modules.AppContext.HttpRuntime
-import layer._
+import infra.modules.AppContext.HttpRuntime
+import infra.layer.{LogLayer, OauthClientRepositoryLayer, OauthClientServiceLayer, OauthSecretGeneratorLayer, UserServiceLayer}
 import zio._
 
 import javax.inject.Provider

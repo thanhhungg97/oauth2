@@ -1,4 +1,4 @@
-package encoder
+package infra.encoder
 
 import service.Encoder
 import zio.{UIO, ZIO}

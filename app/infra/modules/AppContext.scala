@@ -1,4 +1,4 @@
-package controllers.modules
+package infra.modules
 
 import service.{OauthClientService, UserManagementService}
 import zio.{Has, Runtime}

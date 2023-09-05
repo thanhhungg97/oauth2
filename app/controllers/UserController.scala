@@ -3,7 +3,7 @@ package controllers
 import command._
 import controllers.format.UserFormat._
 import error.UserManagementServiceError
-import controllers.modules.AppContext.HttpRuntime
+import infra.modules.AppContext.HttpRuntime
 import play.api.libs.json._
 import play.api.mvc._
 import service._

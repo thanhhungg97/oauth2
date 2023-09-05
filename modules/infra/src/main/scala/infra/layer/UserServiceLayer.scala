@@ -1,7 +1,8 @@
-package layer
+package infra.layer
 
-import encoder.StringEncoder
-import repository.{UserMysqlRepository, UserRepository}
+import infra.encoder.StringEncoder
+import infra.repository.UserMysqlRepository
+import repository.UserRepository
 import service.{Encoder, PasswordPolicy, PasswordService, UserManagementService}
 import zio.Function0ToLayerSyntax
 import zio.blocking.Blocking
