@@ -1,13 +1,11 @@
 package controllers
 
-import controllers.format.OauthClientFormat._
-import controllers.format.OauthFormat._
-import domain.OauthId
-import error.OauthClientServiceError
-import infra.modules.AppContext.HttpRuntime
-import play.api.libs.json._
-import play.api.mvc._
 import command._
+import controllers.format.OauthFormat._
+import controllers.result.HttpResultSyntax.HttpResultSyntax
+import domain.OauthId
+import infra.modules.AppContext.HttpRuntime
+import play.api.mvc._
 import service.OauthClientService
 
 import java.util.UUID
@@ -19,38 +17,27 @@ class OauthClientController @Inject() (
 )(implicit
   runtime: HttpRuntime
 ) extends AbstractController(controllerComponents) {
+  import controllers.result.OauthClientControllerInstance._
 
-  def registerOauthClient(): Action[CreateOauthClientRequest] = Action(parse.json[CreateOauthClientRequest]).async {
-    request: Request[CreateOauthClientRequest] =>
-      runtime.unsafeRunToFuture(
-        OauthClientService
-          .registerOauthClient(
-            request.body.redirectURI,
-            request.body.scope
-          )
-          .fold(
-            handleError,
-            toResult
-          )
-      )
-  }
-
-  def getOauthClient(id: UUID): Action[AnyContent] = Action(parse.json).async {
-    runtime.unsafeRunToFuture(
+  def registerOauthClient(): Action[CreateOauthClientRequest] =
+    Action.asyncZio(parse.json[CreateOauthClientRequest]) { request =>
       OauthClientService
-        .getOauthClientConfig(OauthId(id))
-        .fold(
-          handleError,
-          {
-            case Some(value) => Ok(Json.toJson(value))
-            case None        => BadRequest(Json.obj("code" -> "NOT_FOUND"))
-          }
+        .registerOauthClient(
+          request.body.redirectURI,
+          request.body.scope
         )
-    )
-  }
-  private def toResult(oauthId: OauthId) = Ok(Json.toJson(oauthId))
-  private def handleError(error: OauthClientServiceError): Result = error match {
-    case OauthClientServiceError.RepositoryError(_) =>
-      InternalServerError(Json.obj("code" -> "repository_error", "message" -> "internal error"))
+        .fold(
+          _.toResult,
+          _.toResult
+        )
+    }
+
+  def getOauthClient(id: UUID): Action[AnyContent] = Action.asyncZio { _ =>
+    OauthClientService
+      .getOauthClientConfig(OauthId(id))
+      .fold(
+        _.toResult,
+        _.toResult
+      )
   }
 }

@@ -6,7 +6,6 @@ import error.{PasswordError, PasswordPolicyError}
 import zio.macros.accessible
 import zio.{Function2ToLayerSyntax, IO}
 
-
 @accessible
 trait PasswordService {
   def encode(maybePassword: String): IO[PasswordError, Password]

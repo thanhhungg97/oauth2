@@ -1,7 +1,7 @@
 package infra.layer
 
 import infra.repository.OauthClientMysqlRepository
-import repository.{OauthClientRepository}
+import repository.OauthClientRepository
 import zio._
 
 object OauthClientRepositoryLayer {

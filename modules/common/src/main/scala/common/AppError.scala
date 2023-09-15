@@ -1,6 +1,5 @@
 package common
 
-
 trait AppError extends Throwable
 object AppError {
   trait ValidationError extends AppError

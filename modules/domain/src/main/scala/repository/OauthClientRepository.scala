@@ -12,7 +12,3 @@ trait OauthClientRepository {
   def update(oauthClient: OauthClient): IO[OauthClientRepositoryError, Unit]
 
 }
-
-
-
-

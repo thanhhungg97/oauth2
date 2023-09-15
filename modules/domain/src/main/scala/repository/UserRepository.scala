@@ -9,7 +9,3 @@ trait UserRepository {
   def get(id: String): IO[UserRepositoryError, Option[User]]
   def getByUsername(username: String): IO[UserRepositoryError, Option[User]]
 }
-
-
-
-

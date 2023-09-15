@@ -3,7 +3,6 @@ import sbt.Keys.testFrameworks
 
 val scalaVer = "2.12.9"
 
-
 lazy val commonSettings = Seq(
   organization := "com.scala.oauth",
   version      := "0.1.0-SNAPSHOT",
@@ -19,7 +18,7 @@ lazy val common = project
   .settings(
     name := "common",
     commonSettings,
-    libraryDependencies ++= Zio.all ++ Logging.all,
+    libraryDependencies ++= Zio.all ++ Logging.all
   )
 
 lazy val domain = project
@@ -31,7 +30,6 @@ lazy val domain = project
     testFrameworks ++= Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
     libraryDependencies ++= Zio.all,
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
-
   )
 
 lazy val infra = project
